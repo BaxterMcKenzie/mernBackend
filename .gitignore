@@ -1,0 +1,5 @@
+# All env files
+*.env
+
+# Node Moudles
+node_modules
