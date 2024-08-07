@@ -95,5 +95,5 @@ const updateWorkout = async (req, res) => {
 }
 
 
-// Export mulitplr functions
+// Export mulitple functions
 module.exports = {getWorkouts, getWorkout, createWorkout, deleteWorkout, updateWorkout}
