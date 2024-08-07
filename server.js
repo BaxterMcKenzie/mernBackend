@@ -1,6 +1,9 @@
 // DotEnv
 require('dotenv').config()
 
+// Bring in CORS
+const cors = require('cors');
+
 // Bring in express
 const express = require('express');
 
@@ -14,7 +17,7 @@ const app = express();
 const port = 4000;
 
 // Allow CORS - Cross Origin support
-app.use(cors())
+app.use(cors());
 
 // import Routes
 const workoutRoutes = require('./routes/workouts');
