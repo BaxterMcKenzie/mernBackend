@@ -14,7 +14,21 @@ const workoutSchema = new Schema({
     load: {
         type: Number, 
         require: true
-    }
+    },
+    user_id: {
+        type: String,
+        require: true
+    },
+    image: {
+        type: String,
+        default: null
+    },
+    comments: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Comment', // Reference the comment model
+        },
+    ]
 
 }, {timestamps: true});
 
