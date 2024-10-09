@@ -1,4 +1,5 @@
 // Import the model
+const { cloudinary } = require('../config/cloudinary')
 const Workout = require('../models/workoutModel')
 
 // Import Monsgoose
@@ -56,7 +57,7 @@ const createWorkout = async (req, res) => {
     const {title, load, reps, user_id} = req.body
 
     // Get the uploaded image file name from the req.file object
-    const imageFilename = req.file ? req.file.filename : null; 
+    const imageURL = req.file ? req.file.path : null; 
 
     // add doc to db
     try {
@@ -65,7 +66,7 @@ const createWorkout = async (req, res) => {
             load, 
             reps, 
             user_id,
-            image: imageFilename
+            image: imageURL
         })
         res.status(200).json(workout)
     } catch {
@@ -76,7 +77,7 @@ const createWorkout = async (req, res) => {
 // Delete Workout
 const deleteWorkout = async (req, res) => {
     // Get the id from the request parametres
-    const {id} = req.params
+    const { id } = req.params
     // check if ID is valid
     if(!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({error: 'No such Workout'});
@@ -89,9 +90,19 @@ const deleteWorkout = async (req, res) => {
     if(!workout) {
         return res.status(404).json({error: 'No such Workout'});
     }
+
+    if (workout.image) {
+        // Extract the part after 'upload/' and before the file extension
+        const urlParts = workout.image.split('/');
+        const versionIndex = urlParts.findIndex(part => part.startsWith('v')); // Find the version segment
+        const publicId = urlParts.slice(versionIndex + 1).join('/').split('.')[0]; // Extract public ID after the version
+    
+        await cloudinary.uploader.destroy(publicId);
+    }
+    
     // If it successfully finds & deletes:
     res.status(200).json(workout);
-}
+};
 
 // Update a workout
 
